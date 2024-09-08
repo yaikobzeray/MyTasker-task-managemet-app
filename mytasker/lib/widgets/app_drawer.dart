@@ -30,21 +30,7 @@ class AppDrawer extends GetWidget<HomeScreenController> {
             SizedBox(
               height: size.height * 0.2,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () async{
-                    controller.isDarkMode.value = !controller.isDarkMode.value;
-                    await controller.saveThemeMode();
-                  },
-                  icon: SvgPicture.asset(
-                    ImageConstants.lamp,
-                    color: theme.colorScheme.secondary,
-                  ),
-                ),
-              ],
-            ),
+          
             Expanded(
               child: ListView.builder(
                 itemCount: controller.choices.length,
