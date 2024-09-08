@@ -23,7 +23,10 @@ class TaskCard extends StatelessWidget {
   });
 
   final _taskController = Get.put(TaskController());
-
+bool isToday(DateTime date) {
+  final DateTime now = DateTime.now();
+  return date.year == now.year && date.month == now.month && date.day == now.day;
+}
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -63,10 +66,18 @@ class TaskCard extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: theme.colorScheme.primary,),
+                    color: theme.colorScheme.primary,
+                  ),
                   child: SvgPicture.asset(
-                    ImageConstants.taskIcon,
+                    taskModel.status == "complete"
+                        ? ImageConstants.taskCompleted
+                        : taskModel.status == "pending"
+                            ? ImageConstants.taskPending
+                            : taskModel.status == "ovedue"
+                                ? ImageConstants.taskOverdue
+                                : ImageConstants.taskIcon,
                     height: 24,
+                    color: theme.colorScheme.secondary,
                   ),
                 ),
                 Gap(size.height * 0.02),
@@ -82,11 +93,11 @@ class TaskCard extends StatelessWidget {
                         style: GoogleFonts.roboto(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            
                             letterSpacing: -0.17),
                       ),
                     ),
                     Text(
+                      isToday(DateTime.parse(taskModel.dueDate))? "Today":
                       DateFormat.yMMMEd()
                           .format(DateTime.parse(taskModel.dueDate)),
                       style: GoogleFonts.roboto(
@@ -154,7 +165,7 @@ class TaskCard extends StatelessWidget {
                                         .status ==
                                     "pending"
                                 ? theme.colorScheme.onSecondary
-                                : theme.colorScheme.primary),
+                                : theme.colorScheme.secondary),
                       ),
                     ),
                   ),
